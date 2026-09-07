@@ -1,0 +1,38 @@
+# Jupyter temporary files
+.ipynb_checkpoints/
+.virtual_documents/
+**/.virtual_documents/
+
+# Anaconda internal files
+anaconda_projects/
+**/anaconda_projects/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Saved webpage exports
+*.html
+*_files/
+
+# Duplicate temporary project folder
+New folder/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+*.env
+
+# Office temporary files
+~$*.pptx
+~$*.docx
