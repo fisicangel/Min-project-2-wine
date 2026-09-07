@@ -2,48 +2,26 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "f2b9c438-14ca-4002-a653-d723eb763d0c",
+   "id": "5543aaec-8dc0-4800-933d-1c3e91e0161a",
    "metadata": {},
    "source": [
-    "# Predicting High-Quality White Wine Using Machine Learning"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "f57bbb12-d404-4f40-9937-f55a33036749",
-   "metadata": {},
-   "source": [
+    "# Predicting White Wine Quality Using Machine Learning\n",
+    "\n",
+    "## Project Overview\n",
+    "\n",
+    "This project uses machine learning to predict the quality score of white wine based on its physicochemical properties. The analysis examines characteristics such as acidity, sugar content, density, pH, sulphates, and alcohol.\n",
+    "\n",
+    "The project follows a regression approach because the target variable, `quality`, is a numerical score.\n",
+    "\n",
     "## Business Objective\n",
     "\n",
-    "The objective is to develop a classification model that predicts whether a white wine will be classified as high quality based on its physicochemical properties.\n",
-    "\n",
-    "A high-quality wine is defined as one receiving a quality score of 7 or higher. Such a model could provide an initial data-driven quality assessment to support quality-control and product-screening processes in the wine and beverage industry."
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "f5dc3abd-4913-48bd-904c-c10c85d24db2",
-   "metadata": {},
-   "source": [
-    "## Research Questions\n",
-    "\n",
-    "### Primary Research Question\n",
-    "\n",
-    "Can a machine-learning classification model predict whether a white wine will receive a high-quality score based on its physicochemical properties?\n",
-    "\n",
-    "### Secondary Research Questions\n",
-    "\n",
-    "1. Which physicochemical properties have the strongest relationships with high-quality wine classification?\n",
-    "\n",
-    "2. Which model—Logistic Regression or a tuned K-Nearest Neighbours Classifier—performs better at identifying high-quality white wines?\n",
-    "\n",
-    "3. How well does the best model perform in terms of accuracy, precision, recall, F1-score, and ROC-AUC?"
+    "The objective is to investigate whether physicochemical measurements can be used to predict white wine quality. Such a model could support quality-control processes in the wine and beverage industry by providing an initial data-driven quality assessment."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
-   "id": "b51ff4bd-4d01-44d2-96a6-fc71d1bceb9b",
+   "execution_count": 1,
+   "id": "51dd2506-ec55-4af6-8b4f-86fb95a7e9ce",
    "metadata": {},
    "outputs": [
     {
@@ -184,7 +162,7 @@
        "4      9.9        6  "
       ]
      },
-     "execution_count": 13,
+     "execution_count": 1,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -202,8 +180,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 14,
-   "id": "58bbfccf-28cf-4a40-9e5b-c376c59d2e3e",
+   "execution_count": 2,
+   "id": "b41d534d-3073-4958-b2ad-c8cdee268b01",
    "metadata": {},
    "outputs": [
     {
@@ -242,92 +220,9 @@
    ]
   },
   {
-   "cell_type": "markdown",
-   "id": "0185fdef-af39-4380-8442-e138f8dbe6a6",
-   "metadata": {},
-   "source": [
-    "## 2. Data Quality Checks\n",
-    "\n",
-    "The dataset contains 4,898 white-wine observations and 12 columns.\n",
-    "\n",
-    "All columns contain 4,898 non-null values, confirming that there are no missing values in the dataset. Therefore, no missing-value treatment, such as removing rows or filling values, is required.\n",
-    "\n",
-    "The dataset will also be checked for duplicated rows before proceeding with the analysis and machine-learning model."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 3,
-   "id": "67b9e20d-f778-415d-b0c6-dc9bd7f54494",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Number of duplicated rows: 937\n"
-     ]
-    }
-   ],
-   "source": [
-    "print(\"Number of duplicated rows:\", wine_df.duplicated().sum())"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "c11c3820-51c7-4ce8-b076-b46eeaec994d",
-   "metadata": {},
-   "source": [
-    "### Duplicate Treatment\n",
-    "\n",
-    "The dataset contained 937 duplicated rows. These rows were removed to prevent identical observations from receiving excessive influence during model training and potentially appearing in both the training and test sets.\n",
-    "\n",
-    "After removing duplicates, the cleaned dataset contains 3,961 unique observations."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 4,
-   "id": "5c046752-25ff-4847-8be4-789a4626f64f",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Number of rows after removing duplicates: 3961\n",
-      "Remaining duplicated rows: 0\n"
-     ]
-    }
-   ],
-   "source": [
-    "wine_df = wine_df.drop_duplicates().reset_index(drop=True)\n",
-    "\n",
-    "print(\"Number of rows after removing duplicates:\", wine_df.shape[0])\n",
-    "print(\"Remaining duplicated rows:\", wine_df.duplicated().sum())\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "d0e07d74-0f2f-4413-86a7-581d26af31ef",
-   "metadata": {},
-   "source": [
-    "## 3. Target Definition and Binary Encoding\n",
-    "\n",
-    "The original `quality` variable contains numerical scores ranging from 3 to 9. For this classification project, the scores are converted into two classes:\n",
-    "\n",
-    "- `0` = standard-quality wine, with a quality score below 7\n",
-    "- `1` = high-quality wine, with a quality score of 7 or higher\n",
-    "\n",
-    "The threshold of 7 was selected to distinguish higher-rated wines from the more common scores of 5 and 6. This is a project-defined classification threshold and should not be interpreted as a universal wine-industry standard.\n",
-    "\n",
-    "The Boolean results are converted into binary integers using `.astype(int)`. This is rule-based binary target encoding rather than One-Hot Encoding or Label Encoding."
-   ]
-  },
-  {
    "cell_type": "code",
    "execution_count": null,
-   "id": "c8c02d55-7e56-4d2e-8f80-6eed41016c42",
+   "id": "651f27d0-7687-4942-a1e7-d3997d68fdac",
    "metadata": {},
    "outputs": [],
    "source": []
